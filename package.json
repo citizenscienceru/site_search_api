@@ -7,6 +7,7 @@
   "author": "Roman Milovsky <romdev@vivaldi.net>",
   "license": "MIT",
   "devDependencies": {
+    "@types/express": "^4.17.14",
     "@types/jest": "^29.2.0",
     "@types/node": "^18.11.7",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
@@ -27,5 +28,12 @@
     "ts-node": "ts-node",
     "build_min": "yarn esbuild src/cli.ts --watch --bundle --platform=node --minify --sourcemap=external --outfile=dist/esbuild/cli.js",
     "docs": "typedoc --entryPoints src/main.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.8.0",
+    "sequelize": "^6.25.3",
+    "winston": "^3.8.2"
   }
 }
