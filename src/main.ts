@@ -11,7 +11,7 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import { log_error } from "./logger.js";
-import { connect } from "./db.js";
+import { connect, findProjects } from "./db.js";
 
 // const urlencode = require("urlencode");
 // const json = require("json-middleware");
@@ -22,8 +22,9 @@ import { connect } from "./db.js";
 // app.use(urlencode);
 
 const indexRouter = async (req: Request, res: Response) => {
-  console.log(req.body);
-  return res.send("ok");
+  // console.log(req.body);
+  // return res.send("ok");
+  return res.send(await findProjects(JSON.stringify(req.body)));
 };
 
 (async () => {

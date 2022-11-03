@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { Sequelize, DataTypes, Op } from "sequelize";
 import config from "./config";
 
 const sequelize = new Sequelize(
@@ -9,6 +9,17 @@ type connectResult = {
   status: string; //"ok" | "error";
   data: string;
   sequelize?: Sequelize;
+};
+
+type searchResult = {
+  data: string;
+};
+
+type whereCondition = {
+  name?: string;
+  trends?: unknown;
+  location?: unknown;
+  participation?: unknown;
 };
 //-------------------------------------------------------------------
 const Projects = sequelize.define(
@@ -28,6 +39,15 @@ const Projects = sequelize.define(
     },
     image: {
       type: DataTypes.TEXT,
+    },
+    trends: {
+      type: DataTypes.JSONB,
+    },
+    location: {
+      type: DataTypes.JSONB,
+    },
+    participation: {
+      type: DataTypes.JSONB,
     },
   },
   {
@@ -54,5 +74,44 @@ export async function connect(): Promise<connectResult> {
         data: "PG: Unable to connect to the database: " + JSON.stringify(error),
       };
     });
+}
+
+// поиск проектов
+export async function findProjects(data: string): Promise<searchResult> {
+  const searchData = JSON.parse(data);
+  // первый поиск - по названию
+  let where: whereCondition = {};
+  if (searchData.name) {
+    where = { name: searchData.name };
+  } else {
+    // поиск по остальным параметрам
+    if (searchData.trend) {
+      where = {
+        trends: {
+          [Op.contains]: JSON.parse(searchData.trend),
+        },
+      };
+    }
+    if (searchData.location) {
+      where.location = {
+        [Op.contains]: JSON.parse(searchData.location),
+      };
+    }
+    if (searchData.participation) {
+      where.participation = {
+        [Op.contains]: JSON.parse(searchData.participation),
+      };
+    }
+  }
+
+  try {
+    const result = await Projects.findAll({
+      where: where,
+    });
+    // console.log("Result:", result);
+    return { data: JSON.stringify(result) };
+  } catch (error) {
+    return { data: JSON.stringify(error) };
+  }
 }
 //-------------------------------------------------------------------
