@@ -1,7 +1,8 @@
 # search
 
-Search API
+## RU
 
-Попытка сделать всё на TS + Nest
+Поисковое API для статического сайта на Hexo citizenscience.ru.
+## EN
 
-https://www.metachris.com/2021/04/starting-a-typescript-project-in-2021/
+Search API for a static site on Hexo citizenscience.ru.
